@@ -55,9 +55,9 @@
     
     if (fetchOffset) {
         if (fetchLimit) {
-            rangeHeader = [NSString stringWithFormat:@"objects=%i-%i", fetchOffset, fetchOffset+fetchLimit];
+            rangeHeader = [NSString stringWithFormat:@"objects=%i-%i", (int)fetchOffset, (int)(fetchOffset+fetchLimit)];
         } else {
-            rangeHeader = [NSString stringWithFormat:@"objects=%i-", fetchOffset];
+            rangeHeader = [NSString stringWithFormat:@"objects=%i-", (int)fetchOffset];
         }
         [[query requestHeaders] setValue:rangeHeader forKey:@"Range"];
     }
