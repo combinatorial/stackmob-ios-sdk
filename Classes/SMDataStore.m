@@ -86,6 +86,43 @@ failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
      }
 }
 
+- (void)createObjects:(NSArray *)theObjects inSchema:(NSString *)schema onSuccess:(SMDataStoreCollectionSuccessBlock)successBlock onFailure:(SMDataStoreCollectionFailureBlock)failureBlock
+{
+    [self createObjects:theObjects inSchema:schema options:[SMRequestOptions options] onSuccess:successBlock onFailure:failureBlock];
+}
+
+- (void)createObjects:(NSArray *)theObjects inSchema:(NSString *)schema options:(SMRequestOptions *)options onSuccess:(SMDataStoreCollectionSuccessBlock)successBlock onFailure:(SMDataStoreCollectionFailureBlock)failureBlock
+{
+    if (theObjects == nil || theObjects.count == 0 || schema == nil) {
+        if (failureBlock) {
+            NSError *error = [[NSError alloc] initWithDomain:SMErrorDomain code:SMErrorInvalidArguments userInfo:nil];
+            failureBlock(error, theObjects, schema);
+        }
+    } else {
+        NSString *theSchema = schema;
+        if ([schema rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]].location == NSNotFound) {
+            // lowercase the schema for StackMob
+            theSchema = [theSchema lowercaseString];
+        }
+        
+        //see https://github.com/AFNetworking/AFNetworking/issues/363 which suggests the approach of calling requestWithMethod followed by
+        //setHTTPBody with the JSON array data. The parameters object can't be nil so we pass the first object, but this arbitrary and
+        //will get over-written in the call to setHTTPBody below
+        NSMutableURLRequest *request = [[self.session oauthClientWithHTTPS:options.isSecure] requestWithMethod:@"POST" path:theSchema parameters:theObjects[0]];
+        
+        NSError *error = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:theObjects options:0 error:&error];
+        if(error != nil) {
+            failureBlock(error, theObjects, schema);
+        } else {
+            [request setHTTPBody:jsonData];
+            SMFullResponseSuccessBlock urlSuccessBlock = [self SMFullResponseSuccessBlockForSchema:schema withCollectionSuccessBlock:successBlock];
+            SMFullResponseFailureBlock urlFailureBlock = [self SMFullResponseFailureBlockForObjects:theObjects ofSchema:schema withCollectionFailureBlock:failureBlock];
+            [self queueRequest:request options:options onSuccess:urlSuccessBlock onFailure:urlFailureBlock];
+        }
+    }
+}
+
 - (void)readObjectWithId:(NSString *)theObjectId
                 inSchema:(NSString *)schema
                onSuccess:(SMDataStoreSuccessBlock)successBlock

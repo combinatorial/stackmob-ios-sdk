@@ -55,6 +55,14 @@ typedef void (^SMFullResponseFailureBlock)(NSURLRequest *request, NSHTTPURLRespo
 typedef void (^SMDataStoreSuccessBlock)(NSDictionary* theObject, NSString *schema);
 
 /**
+ The block parameters expected for a success response from a call to the Datastore which returns the objects and schema.
+ 
+ @param theObjects An updated array of dictionary representation of the objects.
+ @param schema The schema to which the objects belongs.
+ */
+typedef void (^SMDataStoreCollectionSuccessBlock)(NSArray* theObjects, NSString *schema);
+
+/**
  The block parameters expected for a success response from a call to the Datastore which returns the object ID and schema.
  
  @param theObjectId The object id used in this operation.
@@ -70,6 +78,15 @@ typedef void (^SMDataStoreObjectIdSuccessBlock)(NSString* theObjectId, NSString 
  @param schema The schema to which the object belongs.
  */
 typedef void (^SMDataStoreFailureBlock)(NSError *theError, NSDictionary* theObject, NSString *schema);
+
+/**
+ The block parameters expected for a failure response from a call to the Datastore which returns the error, all objects and schema.
+ 
+ @param theError An error object describing the failure.
+ @param theObjects The array of dictionary representation of the objects sent as part of the failed operation.
+ @param schema The schema to which the object belongs.
+ */
+typedef void (^SMDataStoreCollectionFailureBlock)(NSError *theError, NSArray* theObjects, NSString *schema);
 
 /** 
  The block parameters expected for a failure response from a call to the Datastore which returns the error, object ID and schema.

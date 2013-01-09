@@ -106,25 +106,6 @@
            onSuccess:(SMDataStoreSuccessBlock)successBlock
            onFailure:(SMDataStoreFailureBlock)failureBlock;
 
-/**
- Create a new object in your StackMob Datastore.
- 
- @param theObject A dictionary describing the object to create on StackMob. Keys should map to valid StackMob fields. Values should be JSON serializable objects.
- @param schema The StackMob schema in which to create this new object.
- @param options An options object contains headers and other configuration for this request.
- @param successCallbackQueue The dispatch queue used to execute the success block. If nil is passed, the main queue is used.
- @param failureCallbackQueue The dispatch queue used to execute the failure block. If nil is passed, the main queue is used.
- @param successBlock <i>typedef void (^SMDataStoreSuccessBlock)(NSDictionary* theObject, NSString *schema)</i>. A block object to invoke on the successCallbackQueue after the object is successfully created. Passed the dictionary representation of the response from StackMob and the schema in which the new object was created.
- @param failureBlock <i>typedef void (^SMDataStoreFailureBlock)(NSError *theError, NSDictionary* theObject, NSString *schema)</i>. A block object to invoke on the failureCallbackQueue if the Datastore fails to create the specified object. Passed the error returned by StackMob, the dictionary sent with this create request, and the schema in which the object was to be created.
- */
-- (void)createObject:(NSDictionary *)theObject
-            inSchema:(NSString *)schema
-             options:(SMRequestOptions *)options
-successCallbackQueue:(dispatch_queue_t)successCallbackQueue
-failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
-           onSuccess:(SMDataStoreSuccessBlock)successBlock
-           onFailure:(SMDataStoreFailureBlock)failureBlock;
-
 /** 
  Read an existing object from your StackMob Datastore.
  
@@ -153,7 +134,7 @@ failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
                onSuccess:(SMDataStoreSuccessBlock)successBlock
                onFailure:(SMDataStoreObjectIdFailureBlock)failureBlock;
 
-/**
+/** 
  Read an existing object from your StackMob Datastore (with request options).
  
  @param theObjectId The object id (the value of the primary key field) for the object to read.
@@ -204,7 +185,7 @@ failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
                  onSuccess:(SMDataStoreSuccessBlock)successBlock
                  onFailure:(SMDataStoreFailureBlock)failureBlock;
 
-/**
+/** 
  Update an existing object in your StackMob Datastore (with request options).
  
  @param theObjectId The object id (the value of the primary key field) for the object to update.
@@ -261,7 +242,7 @@ failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
                         onSuccess:(SMDataStoreSuccessBlock)successBlock
                         onFailure:(SMDataStoreFailureBlock)failureBlock;
 
-/**
+/** 
  Do an atomic update on a particular value (with request options).
  
  @param theObjectId The object id (the value of the primary key field) for the object to update.
@@ -312,7 +293,7 @@ failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
              onSuccess:(SMDataStoreObjectIdSuccessBlock)successBlock
              onFailure:(SMDataStoreObjectIdFailureBlock)failureBlock;
 
-/**
+/** 
  Delete an existing object from your StackMob Datastore (with request options).
  
  @param theObjectId The object id (the value of the primary key field) for the object to delete.
@@ -325,7 +306,7 @@ failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
  */
 - (void)deleteObjectId:(NSString *)theObjectId
               inSchema:(NSString *)schema
-               options:(SMRequestOptions *)options
+           options:(SMRequestOptions *)options
   successCallbackQueue:(dispatch_queue_t)successCallbackQueue
   failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
              onSuccess:(SMDataStoreObjectIdSuccessBlock)successBlock
@@ -357,7 +338,7 @@ failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
  */
 - (void)performQuery:(SMQuery *)query options:(SMRequestOptions *)options onSuccess:(SMResultsSuccessBlock)successBlock onFailure:(SMFailureBlock)failureBlock;
 
-/**
+/** 
  Execute a query against your StackMob Datastore (with request options).
  
  @param query An `SMQuery` object describing the query to perform.

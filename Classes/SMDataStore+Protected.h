@@ -31,6 +31,7 @@
 
 - (SMFullResponseSuccessBlock)SMFullResponseSuccessBlockForSchema:(NSString *)schema withSuccessBlock:(SMDataStoreSuccessBlock)successBlock;
 
+- (SMFullResponseSuccessBlock)SMFullResponseSuccessBlockForSchema:(NSString *)schema withCollectionSuccessBlock:(SMDataStoreCollectionSuccessBlock)successBlock;
 
 - (SMFullResponseSuccessBlock)SMFullResponseSuccessBlockForObjectId:(NSString *)theObjectId ofSchema:(NSString *)schema withSuccessBlock:(SMDataStoreObjectIdSuccessBlock)successBlock;
 
@@ -49,6 +50,7 @@
 
 - (SMFullResponseFailureBlock)SMFullResponseFailureBlockForObject:(NSDictionary *)theObject ofSchema:(NSString *)schema withFailureBlock:(SMDataStoreFailureBlock)failureBlock;
 
+- (SMFullResponseFailureBlock)SMFullResponseFailureBlockForObjects:(NSArray *)theObjects ofSchema:(NSString *)schema withCollectionFailureBlock:(SMDataStoreCollectionFailureBlock)failureBlock;
 
 - (SMFullResponseFailureBlock)SMFullResponseFailureBlockForObjectId:(NSString *)theObjectId ofSchema:(NSString *)schema withFailureBlock:(SMDataStoreObjectIdFailureBlock)failureBlock;
 

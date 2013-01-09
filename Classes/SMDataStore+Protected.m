@@ -37,6 +37,16 @@
     };
 }
 
+- (SMFullResponseSuccessBlock)SMFullResponseSuccessBlockForSchema:(NSString *)schema withCollectionSuccessBlock:(SMDataStoreCollectionSuccessBlock)successBlock
+{
+    return ^void(NSURLRequest *request, NSHTTPURLResponse *response, id JSON)
+    {
+        if (successBlock) {
+            successBlock(JSON, schema);
+        }
+    };
+}
+
 - (SMFullResponseSuccessBlock)SMFullResponseSuccessBlockForObjectId:(NSString *)theObjectId ofSchema:(NSString *)schema withSuccessBlock:(SMDataStoreObjectIdSuccessBlock)successBlock 
 {
     return ^void(NSURLRequest *request, NSHTTPURLResponse *response, id JSON)
@@ -94,6 +104,16 @@
     {
         if (failureBlock) {
             response == nil ? failureBlock(error, theObject, schema) : failureBlock([self errorFromResponse:response JSON:JSON], theObject, schema);
+        }
+    };
+}
+
+- (SMFullResponseFailureBlock)SMFullResponseFailureBlockForObjects:(NSArray *)theObjects ofSchema:(NSString *)schema withCollectionFailureBlock:(SMDataStoreCollectionFailureBlock)failureBlock
+{
+    return ^void(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON)
+    {
+        if (failureBlock) {
+            response == nil ? failureBlock(error, theObjects, schema) : failureBlock([self errorFromResponse:response JSON:JSON], theObjects, schema);
         }
     };
 }
