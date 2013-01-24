@@ -67,23 +67,23 @@ failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
            onSuccess:(SMDataStoreSuccessBlock)successBlock
            onFailure:(SMDataStoreFailureBlock)failureBlock
 {
-     if (theObject == nil || schema == nil) {
-     if (failureBlock) {
-     NSError *error = [[NSError alloc] initWithDomain:SMErrorDomain code:SMErrorInvalidArguments userInfo:nil];
-     failureBlock(error, theObject, schema);
-     }
-     } else {
-     NSString *theSchema = schema;
-     if ([schema rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]].location == NSNotFound) {
-     // lowercase the schema for StackMob
-     theSchema = [theSchema lowercaseString];
-     }
-     
-     NSMutableURLRequest *request = [[self.session oauthClientWithHTTPS:options.isSecure] requestWithMethod:@"POST" path:theSchema parameters:theObject];
-     SMFullResponseSuccessBlock urlSuccessBlock = [self SMFullResponseSuccessBlockForSchema:schema withSuccessBlock:successBlock];
-     SMFullResponseFailureBlock urlFailureBlock = [self SMFullResponseFailureBlockForObject:theObject ofSchema:schema withFailureBlock:failureBlock];
-     [self queueRequest:request options:options successCallbackQueue:successCallbackQueue failureCallbackQueue:failureCallbackQueue onSuccess:urlSuccessBlock onFailure:urlFailureBlock];
-     }
+    if (theObject == nil || schema == nil) {
+        if (failureBlock) {
+            NSError *error = [[NSError alloc] initWithDomain:SMErrorDomain code:SMErrorInvalidArguments userInfo:nil];
+            failureBlock(error, theObject, schema);
+        }
+    } else {
+        NSString *theSchema = schema;
+        if ([schema rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]].location == NSNotFound) {
+            // lowercase the schema for StackMob
+            theSchema = [theSchema lowercaseString];
+        }
+        
+        NSMutableURLRequest *request = [[self.session oauthClientWithHTTPS:options.isSecure] requestWithMethod:@"POST" path:theSchema parameters:theObject];
+        SMFullResponseSuccessBlock urlSuccessBlock = [self SMFullResponseSuccessBlockForSchema:schema withSuccessBlock:successBlock];
+        SMFullResponseFailureBlock urlFailureBlock = [self SMFullResponseFailureBlockForObject:theObject ofSchema:schema withFailureBlock:failureBlock];
+        [self queueRequest:request options:options successCallbackQueue:successCallbackQueue failureCallbackQueue:failureCallbackQueue onSuccess:urlSuccessBlock onFailure:urlFailureBlock];
+    }
 }
 
 - (void)createObjects:(NSArray *)theObjects inSchema:(NSString *)schema onSuccess:(SMDataStoreCollectionSuccessBlock)successBlock onFailure:(SMDataStoreCollectionFailureBlock)failureBlock
@@ -92,6 +92,17 @@ failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
 }
 
 - (void)createObjects:(NSArray *)theObjects inSchema:(NSString *)schema options:(SMRequestOptions *)options onSuccess:(SMDataStoreCollectionSuccessBlock)successBlock onFailure:(SMDataStoreCollectionFailureBlock)failureBlock
+{
+    [self createObjects:theObjects inSchema:schema options:options successCallbackQueue:dispatch_get_main_queue() failureCallbackQueue:dispatch_get_main_queue() onSuccess:successBlock onFailure:failureBlock];
+}
+
+- (void)createObjects:(NSArray *)theObjects
+            inSchema:(NSString *)schema
+             options:(SMRequestOptions *)options
+successCallbackQueue:(dispatch_queue_t)successCallbackQueue
+failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
+           onSuccess:(SMDataStoreCollectionSuccessBlock)successBlock
+           onFailure:(SMDataStoreCollectionFailureBlock)failureBlock
 {
     if (theObjects == nil || theObjects.count == 0 || schema == nil) {
         if (failureBlock) {
@@ -118,7 +129,7 @@ failureCallbackQueue:(dispatch_queue_t)failureCallbackQueue
             [request setHTTPBody:jsonData];
             SMFullResponseSuccessBlock urlSuccessBlock = [self SMFullResponseSuccessBlockForSchema:schema withCollectionSuccessBlock:successBlock];
             SMFullResponseFailureBlock urlFailureBlock = [self SMFullResponseFailureBlockForObjects:theObjects ofSchema:schema withCollectionFailureBlock:failureBlock];
-            [self queueRequest:request options:options onSuccess:urlSuccessBlock onFailure:urlFailureBlock];
+            [self queueRequest:request options:options successCallbackQueue:successCallbackQueue failureCallbackQueue:failureCallbackQueue onSuccess:urlSuccessBlock onFailure:urlFailureBlock];
         }
     }
 }

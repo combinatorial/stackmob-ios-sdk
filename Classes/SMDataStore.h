@@ -106,6 +106,34 @@
            onSuccess:(SMDataStoreSuccessBlock)successBlock
            onFailure:(SMDataStoreFailureBlock)failureBlock;
 
+/**
+ Create a new object in your StackMob Datastore.
+ 
+ @param theObjects An array of dictionaries describing the objects to create on StackMob. Keys should map to valid StackMob fields. Values should be JSON serializable objects.
+ @param schema The StackMob schema in which to create the new objects.
+ @param successBlock <i>typedef void (^SMDataStoreCollectionSuccessBlock)(NSArray* theObjects, NSString *schema)</i>. A block object to invoke on the main thread after the object is successfully created. Passed the array of dictionary representation of the response from StackMob and the schema in which the new objects were created.
+ @param failureBlock <i>typedef void (^SMDataStoreCollectionFailureBlock)(NSError *theError, NSArray* theObjects, NSString *schema)</i>. A block object to invoke on the main thread if the Datastore fails to create the specified object. Passed the error returned by StackMob, the array sent with this create request, and the schema in which the objects were to be created.
+ */
+- (void)createObjects:(NSArray *)theObjects
+            inSchema:(NSString *)schema
+           onSuccess:(SMDataStoreCollectionSuccessBlock)successBlock
+           onFailure:(SMDataStoreCollectionFailureBlock)failureBlock;
+
+/**
+ Create a new object in your StackMob Datastore.
+ 
+ @param theObjects An array of dictionaries describing the objects to create on StackMob. Keys should map to valid StackMob fields. Values should be JSON serializable objects.
+ @param schema The StackMob schema in which to create the new objects.
+ @param options An options object contains headers and other configuration for this request
+ @param successBlock <i>typedef void (^SMDataStoreCollectionSuccessBlock)(NSArray* theObjects, NSString *schema)</i>. A block object to invoke on the main thread after the object is successfully created. Passed the array of dictionary representation of the response from StackMob and the schema in which the new objects were created.
+ @param failureBlock <i>typedef void (^SMDataStoreCollectionFailureBlock)(NSError *theError, NSArray* theObjects, NSString *schema)</i>. A block object to invoke on the main thread if the Datastore fails to create the specified object. Passed the error returned by StackMob, the array sent with this create request, and the schema in which the objects were to be created.
+ */
+- (void)createObjects:(NSArray *)theObjects
+            inSchema:(NSString *)schema
+             options:(SMRequestOptions *)options
+           onSuccess:(SMDataStoreCollectionSuccessBlock)successBlock
+           onFailure:(SMDataStoreCollectionFailureBlock)failureBlock;
+
 /** 
  Read an existing object from your StackMob Datastore.
  
